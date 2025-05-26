@@ -44,6 +44,8 @@ else()
             src/views/gameview.cpp
             src/views/mainmenuview.h
             src/views/mainmenuview.cpp
+            src/views/settingsview.h
+            src/views/settingsview.cpp
 
 
         )

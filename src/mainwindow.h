@@ -4,6 +4,7 @@
 #include <QStackedWidget>
 #include "views/mainmenuview.h"
 #include "views/gameview.h"
+#include "views/settingsview.h"
 #include "game.h"
 
 class MainWindow : public QMainWindow
@@ -18,6 +19,7 @@ protected:
 
 private slots:
     void handleStartGame();
+    void handleOpenSettings();
 
 private:
     QStackedWidget *m_stack = nullptr;
@@ -26,6 +28,8 @@ private:
 
     MainMenuView *m_mainMenu;
     GameView *m_gameView;
+
+    SettingsView *m_settingsView;
 
     Game m_game;
 };

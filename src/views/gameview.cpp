@@ -1,4 +1,3 @@
-
 #include "gameview.h"
 #include <QGridLayout>
 #include <QPushButton>
@@ -23,11 +22,13 @@ GameView::GameView(int rows, int cols, QWidget *parent) : QWidget(parent), m_row
 void GameView::renderBoard(const Game &game)
 {
     for (int row = 0; row < game.rows(); ++row)
+    {
         for (int col = 0; col < game.cols(); ++col)
         {
             QString value = game.getCell(row, col);
             updateCell(row, col, value);
         }
+    }
 }
 
 void GameView::updateCell(int row, int col, const QString &value)

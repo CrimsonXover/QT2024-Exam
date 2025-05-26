@@ -2,6 +2,8 @@
 
 #include <QWidget>
 #include <QVector>
+#include <QMap>
+
 #include "../game.h"
 
 class QGridLayout;
@@ -21,8 +23,8 @@ public:
     void clearBoard();
 
 private:
-    int m_rows;
-    int m_cols;
+    quint32 m_rows;
+    quint32 m_cols;
     QGridLayout *m_layout;
     QVector<QPushButton*> m_cells;
 

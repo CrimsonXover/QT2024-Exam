@@ -15,6 +15,7 @@ public:
 
 signals:
     void startGameClicked();
+    void leaderboardClicked();
     void settingsClicked();
     void quitClicked();
 
@@ -24,6 +25,7 @@ private:
     QLabel *m_titleLabel;
 
     QPushButton *m_startButton;
+    QPushButton *m_leaderboardButton;
     QPushButton *m_settingsButton;
     QPushButton *m_quitButton;
 };
