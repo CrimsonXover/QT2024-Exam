@@ -20,7 +20,7 @@ public:
     bool isGameOver() const;
 
     void setCell(int row, int col, const QString& value);
-    const QString getCell(int row, int col) const;
+    const QString& getCell(int row, int col) const;
 
     int rows() const;
     int cols() const;

@@ -18,7 +18,8 @@ void Game::spawnRandomCell(int count)
     if (isBoardFull())
         return;
 
-    for (int i = 0; i < count;) {
+    for (int i = 0; i < count;)
+    {
         int row = QRandomGenerator::global()->bounded(m_rows);
         int col = QRandomGenerator::global()->bounded(m_cols);
         if (getCell(row, col).isEmpty()) {
@@ -36,7 +37,7 @@ void Game::setCell(int row, int col, const QString &val)
     m_board[row * m_cols + col] = val;
 }
 
-const QString Game::getCell(int row, int col) const
+const QString& Game::getCell(int row, int col) const
 {
     if (row < 0 || row >= m_rows || col < 0 || col >= m_cols)
         throw std::out_of_range("getCell called on an out of range cell");
@@ -55,13 +56,13 @@ bool Game::isGameOver() const
 {
     if (!isBoardFull()) return false;
 
-    for (int row = 0; row < m_rows; row++) {
-        for (int col = 0; col < m_cols; col++) {
+    for (int row = 0; row < m_rows; row++)
+        for (int col = 0; col < m_cols; col++)
+        {
             QString current = getCell(row, col);
             if (col < m_cols - 1 && current == getCell(row, col + 1)) return false;
             if (row < m_rows - 1 && current == getCell(row + 1, col)) return false;
         }
-    }
     return true;
 }
 
@@ -70,10 +71,13 @@ void Game::moveCell(int orgRow, int orgCol, int desRow, int desCol)
     QString orgValue = getCell(orgRow, orgCol);
     QString desValue = getCell(desRow, desCol);
 
-    if (!orgValue.isEmpty() && desValue.isEmpty()) {
+    if (!orgValue.isEmpty() && desValue.isEmpty())
+    {
         setCell(desRow, desCol, orgValue);
         setCell(orgRow, orgCol, "");
-    } else if (!orgValue.isEmpty() && orgValue == desValue) {
+    }
+    else if (!orgValue.isEmpty() && orgValue == desValue)
+    {
         setCell(desRow, desCol, QString::number(orgValue.toInt() * 2));
         setCell(orgRow, orgCol, "");
     }

@@ -16,7 +16,6 @@ set(PROJECT_SOURCES
         main.cpp
         ./src/mainwindow.cpp
         ./src/mainwindow.h
-
         ./src/game.h
         ./src/game.cpp
 
@@ -41,6 +40,12 @@ else()
     else()
         add_executable(2048
             ${PROJECT_SOURCES}
+            src/views/gameview.h
+            src/views/gameview.cpp
+            src/views/mainmenuview.h
+            src/views/mainmenuview.cpp
+
+
         )
     endif()
 endif()

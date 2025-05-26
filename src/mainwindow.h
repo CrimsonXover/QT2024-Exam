@@ -1,12 +1,10 @@
 #pragma once
 
 #include <QMainWindow>
-#include <QKeyEvent>
+#include <QStackedWidget>
+#include "views/mainmenuview.h"
+#include "views/gameview.h"
 #include "game.h"
-
-class QPushButton;
-class QWidget;
-class QGridLayout;
 
 class MainWindow : public QMainWindow
 {
@@ -14,18 +12,20 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
 
 protected:
     void keyPressEvent(QKeyEvent *event) override;
 
+private slots:
+    void handleStartGame();
+
 private:
-    void initUI();
-    void refreshUI();
-    void setCellColor(QPushButton *cell);
+    QStackedWidget *m_stack = nullptr;
+
+    void setupConnections();
+
+    MainMenuView *m_mainMenu;
+    GameView *m_gameView;
 
     Game m_game;
-    QWidget *m_widget;
-    QGridLayout *m_layout;
-    QVector<QVector<QPushButton*>> m_cells;
 };
