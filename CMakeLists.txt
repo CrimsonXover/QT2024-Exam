@@ -46,6 +46,8 @@ else()
             src/views/mainmenuview.cpp
             src/views/settingsview.h
             src/views/settingsview.cpp
+            src/views/leaderboardview.h
+            src/views/leaderboardview.cpp
 
 
         )

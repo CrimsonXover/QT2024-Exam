@@ -1,20 +1,20 @@
-#include "settingsview.h"
+#include "leaderboardview.h"
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QPushButton>
 #include "../mainwindow.h"
 
-SettingsView::SettingsView()
+LeaderboardView::LeaderboardView()
 {
     m_layout = new QVBoxLayout(this);
 
-    m_titleLabel = new QLabel("Settings");
+    m_titleLabel = new QLabel("Leaderboard");
     m_titleLabel->setAlignment(Qt::AlignCenter);
     m_titleLabel->setStyleSheet("font-size: 12px; font-weight: bold;");
     m_layout->addWidget(m_titleLabel);
 
-    m_confirmButton = new QPushButton("Confirm");
-    m_layout->addWidget(m_confirmButton);
+    m_backButton = new QPushButton("Back");
+    m_layout->addWidget(m_backButton);
 
-    connect(m_confirmButton, &QPushButton::clicked, this, &SettingsView::confirmClicked);
+    connect(m_backButton, &QPushButton::clicked, this, &LeaderboardView::backClicked);
 }

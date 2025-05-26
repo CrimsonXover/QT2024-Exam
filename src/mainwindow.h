@@ -4,6 +4,7 @@
 #include <QStackedWidget>
 #include "views/mainmenuview.h"
 #include "views/gameview.h"
+#include "views/leaderboardview.h"
 #include "views/settingsview.h"
 #include "game.h"
 
@@ -20,6 +21,9 @@ protected:
 private slots:
     void handleStartGame();
     void handleOpenSettings();
+    void handleSettingsConfirmed();
+    void handleOpenLeaderboard();
+    void handleLeaderboardBack();
 
 private:
     QStackedWidget *m_stack = nullptr;
@@ -30,6 +34,7 @@ private:
     GameView *m_gameView;
 
     SettingsView *m_settingsView;
+    LeaderboardView *m_leaderboardView;
 
     Game m_game;
 };

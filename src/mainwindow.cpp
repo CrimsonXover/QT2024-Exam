@@ -6,12 +6,14 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), m_game(4, 4)
 {
     m_mainMenu = new MainMenuView();
     m_gameView = new GameView(4, 4);
+    m_leaderboardView = new LeaderboardView();
     m_settingsView = new SettingsView();
 
     m_stack = new QStackedWidget(this);
 
     m_stack->addWidget(m_mainMenu);
     m_stack->addWidget(m_gameView);
+    m_stack->addWidget(m_leaderboardView);
     m_stack->addWidget(m_settingsView);
     setCentralWidget(m_stack);
 
@@ -23,8 +25,13 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), m_game(4, 4)
 void MainWindow::setupConnections()
 {
     connect(m_mainMenu, &MainMenuView::startGameClicked, this, &MainWindow::handleStartGame);
+    connect(m_mainMenu, &MainMenuView::leaderboardClicked, this, &MainWindow::handleOpenLeaderboard);
     connect(m_mainMenu, &MainMenuView::settingsClicked, this, &MainWindow::handleOpenSettings);
     connect(m_mainMenu, &MainMenuView::quitClicked, qApp, &QApplication::quit);
+
+    connect(m_leaderboardView, &LeaderboardView::backClicked, this, &MainWindow::handleLeaderboardBack);
+
+    connect(m_settingsView, &SettingsView::confirmClicked, this, &MainWindow::handleSettingsConfirmed);
 }
 
 void MainWindow::handleStartGame()
@@ -39,6 +46,21 @@ void MainWindow::handleStartGame()
 void MainWindow::handleOpenSettings()
 {
     m_stack->setCurrentWidget(m_settingsView);
+}
+
+void MainWindow::handleSettingsConfirmed()
+{
+    m_stack->setCurrentWidget(m_mainMenu);
+}
+
+void MainWindow::handleOpenLeaderboard()
+{
+    m_stack->setCurrentWidget(m_leaderboardView);
+}
+
+void MainWindow::handleLeaderboardBack()
+{
+    m_stack->setCurrentWidget(m_mainMenu);
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
