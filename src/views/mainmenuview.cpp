@@ -5,6 +5,8 @@
 
 MainMenuView::MainMenuView(QWidget *parent) : QWidget(parent)
 {
+    setFixedSize(240, 320);
+
     m_layout = new QVBoxLayout(this);
 
     m_titleLabel = new QLabel("2048 Game");

@@ -21,9 +21,11 @@ protected:
 private slots:
     void handleStartGame();
     void handleOpenSettings();
-    void handleSettingsConfirmed();
+    void handleSettingsConfirmed(quint32 newRows, quint32 newCols, const QString& playerName);
     void handleOpenLeaderboard();
     void handleLeaderboardBack();
+    void handleGameReset();
+    void handleGameOver();
 
 private:
     QStackedWidget *m_stack = nullptr;
@@ -37,4 +39,9 @@ private:
     LeaderboardView *m_leaderboardView;
 
     Game m_game;
+
+    quint32 m_gameRows;
+    quint32 m_gameCols;
+    QString m_playerName;
+    bool m_isGameOver;
 };

@@ -6,10 +6,10 @@
 class Game
 {
 public:
-    Game(int rows = 4, int cols = 4);
+    Game(quint32 rows = 4, quint32 cols = 4);
 
     void resetBoard();
-    void spawnRandomCell(int count = 1);
+    void spawnRandomCell(quint32 count = 1);
 
     void moveLeft();
     void moveRight();
@@ -19,17 +19,21 @@ public:
     bool isBoardFull() const;
     bool isGameOver() const;
 
-    void setCell(int row, int col, const QString& value);
-    const QString& getCell(int row, int col) const;
+    const quint32& score() const;
+    void resetScore();
 
-    int rows() const;
-    int cols() const;
+    void setCell(quint32 row, quint32 col, const QString& value);
+    const QString& getCell(quint32 row, quint32 col) const;
+
+    quint32 rows() const;
+    quint32 cols() const;
 
 private:
-    int m_rows;
-    int m_cols;
+    quint32 m_rows;
+    quint32 m_cols;
+    quint32 m_score;
 
-    void moveCell(int orgRow, int orgCol, int desRow, int desCol);
+    void moveCell(quint32 orgRow, quint32 orgCol, quint32 desRow, quint32 desCol);
 
     QVector<QString> m_board;
 };

@@ -1,43 +1,45 @@
 #include "game.h"
 #include <QRandomGenerator>
 
-Game::Game(int rows, int cols) : m_rows(rows), m_cols(cols), m_board(rows * cols) {
+Game::Game(quint32 rows, quint32 cols) : m_rows(rows), m_cols(cols), m_board(rows * cols) {
+    resetScore();
     spawnRandomCell(2);
 }
 
 void Game::resetBoard()
 {
-    for(auto i = 0; i < m_board.size(); i++)
+    for(qint32 i = 0; i < m_board.size(); i++)
         m_board[i] = "";
 
+    resetScore();
     spawnRandomCell(2);
 }
 
-void Game::spawnRandomCell(int count)
+void Game::spawnRandomCell(quint32 count)
 {
     if (isBoardFull())
         return;
 
-    for (int i = 0; i < count;)
+    for (qint32 i = 0; i < count;)
     {
-        int row = QRandomGenerator::global()->bounded(m_rows);
-        int col = QRandomGenerator::global()->bounded(m_cols);
+        auto row = QRandomGenerator::global()->bounded(m_rows);
+        auto col = QRandomGenerator::global()->bounded(m_cols);
         if (getCell(row, col).isEmpty()) {
-            int val = QRandomGenerator::global()->bounded(100) < 75 ? 2 : 4;
+            auto val = QRandomGenerator::global()->bounded(100) < 75 ? 2 : 4;
             setCell(row, col, QString::number(val));
             i++;
         }
     }
 }
 
-void Game::setCell(int row, int col, const QString &val)
+void Game::setCell(quint32 row, quint32 col, const QString &val)
 {
     if (row < 0 || row >= m_rows || col < 0 || col >= m_cols)
         throw std::out_of_range("setCell called on an out of range cell");
     m_board[row * m_cols + col] = val;
 }
 
-const QString& Game::getCell(int row, int col) const
+const QString& Game::getCell(quint32 row, quint32 col) const
 {
     if (row < 0 || row >= m_rows || col < 0 || col >= m_cols)
         throw std::out_of_range("getCell called on an out of range cell");
@@ -46,7 +48,7 @@ const QString& Game::getCell(int row, int col) const
 
 bool Game::isBoardFull() const
 {
-    for (auto i = 0; i < m_board.size(); i++)
+    for (qint32 i = 0; i < m_board.size(); i++)
         if (m_board[i].isEmpty()) return false;
 
     return true;
@@ -56,8 +58,8 @@ bool Game::isGameOver() const
 {
     if (!isBoardFull()) return false;
 
-    for (int row = 0; row < m_rows; row++)
-        for (int col = 0; col < m_cols; col++)
+    for (qint32 row = 0; row < m_rows; row++)
+        for (qint32 col = 0; col < m_cols; col++)
         {
             QString current = getCell(row, col);
             if (col < m_cols - 1 && current == getCell(row, col + 1)) return false;
@@ -66,7 +68,7 @@ bool Game::isGameOver() const
     return true;
 }
 
-void Game::moveCell(int orgRow, int orgCol, int desRow, int desCol)
+void Game::moveCell(quint32 orgRow, quint32 orgCol, quint32 desRow, quint32 desCol)
 {
     QString orgValue = getCell(orgRow, orgCol);
     QString desValue = getCell(desRow, desCol);
@@ -78,42 +80,49 @@ void Game::moveCell(int orgRow, int orgCol, int desRow, int desCol)
     }
     else if (!orgValue.isEmpty() && orgValue == desValue)
     {
-        setCell(desRow, desCol, QString::number(orgValue.toInt() * 2));
+        auto mergedValue = orgValue.toInt() * 2;
+        setCell(desRow, desCol, QString::number(mergedValue));
         setCell(orgRow, orgCol, "");
+        m_score += mergedValue;
     }
 }
 
 void Game::moveLeft()
 {
-    for (int pass = 1; pass < m_cols; pass++)
-        for (int row = 0; row < m_rows; row++)
-            for (int col = 1; col < m_cols; col++)
+    for (qint32 pass = 1; pass < m_cols; pass++)
+        for (qint32 row = 0; row < m_rows; row++)
+            for (qint32 col = 1; col < m_cols; col++)
                 moveCell(row, col, row, col - 1);
 }
 
 void Game::moveRight()
 {
-    for (int pass = 1; pass < m_cols; pass++)
-        for (int row = 0; row < m_rows; row++)
-            for (int col = m_cols - 2; col >= 0; col--)
+    for (qint32 pass = 1; pass < m_cols; pass++)
+        for (qint32 row = 0; row < m_rows; row++)
+            for (qint32 col = m_cols - 2; col >= 0; col--)
                 moveCell(row, col, row, col + 1);
 }
 
 void Game::moveUp()
 {
-    for (int pass = 1; pass < m_rows; pass++)
-        for (int row = 1; row < m_rows; row++)
-            for (int col = 0; col < m_cols; col++)
+    for (qint32 pass = 1; pass < m_rows; pass++)
+        for (qint32 row = 1; row < m_rows; row++)
+            for (qint32 col = 0; col < m_cols; col++)
                 moveCell(row, col, row - 1, col);
 }
 
 void Game::moveDown()
 {
-    for (int pass = 1; pass < m_rows; pass++)
-        for (int row = m_rows - 2; row >= 0; row--)
-            for (int col = 0; col < m_cols; col++)
+    for (qint32 pass = 1; pass < m_rows; pass++)
+        for (qint32 row = m_rows - 2; row >= 0; row--)
+            for (qint32 col = 0; col < m_cols; col++)
                 moveCell(row, col, row + 1, col);
 }
 
-int Game::rows() const { return m_rows; }
-int Game::cols() const { return m_cols; }
+quint32 Game::rows() const { return m_rows; }
+
+quint32 Game::cols() const { return m_cols; }
+
+const quint32& Game::score() const { return m_score; }
+
+void Game::resetScore(){ m_score = 0; }

@@ -1,39 +1,68 @@
 #include "gameview.h"
 #include <QGridLayout>
 #include <QPushButton>
+#include <QLabel>
 
-GameView::GameView(int rows, int cols, QWidget *parent) : QWidget(parent), m_rows(rows), m_cols(cols)
+GameView::GameView(quint32 rows, quint32 cols, QWidget *parent) : QWidget(parent), m_rows(rows), m_cols(cols)
 {
-    m_layout = new QGridLayout(this);
+    m_mainLayout = new QGridLayout(this);
+    m_controlsLayout = new QHBoxLayout();
+
+    m_scoreLabel = new QLabel("Score:");
+    m_scoreLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    m_scoreValue = new QLabel("0");
+    m_scoreValue->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+
+    m_resetButton = new QPushButton("Reset");
+    m_resetButton->setFocusPolicy(Qt::NoFocus);
+    m_backButton = new QPushButton("Back");
+    m_backButton->setFocusPolicy(Qt::NoFocus);
+
+    m_controlsLayout->addWidget(m_scoreLabel);
+    m_controlsLayout->addWidget(m_scoreValue);
+    m_controlsLayout->addWidget(m_resetButton);
+    m_controlsLayout->addWidget(m_backButton);
+
+    connect(m_resetButton, &QPushButton::clicked, this, &GameView::resetClicked);
+    connect(m_backButton, &QPushButton::clicked, this, &GameView::backClicked);
+
+
+    m_mainLayout->addLayout(m_controlsLayout, 0, 0, 1, cols);
+
     m_cells.resize(rows * cols);
 
-    for (int row = 0; row < rows; ++row)
-        for (int col = 0; col < cols; ++col)
+    for (quint32 row = 0; row < rows; row++)
+        for (quint32 col = 0; col < cols; col++)
         {
-            int index = row * cols + col;
+            quint32 index = row * cols + col;
             QPushButton *cell = new QPushButton;
-            cell->setFixedSize(50, 50);
+
+            qint32 width = 200 / rows;
+            qint32 height = 200 / cols;
+
+            cell->setFixedSize(width, height);
             cell->setFocusPolicy(Qt::NoFocus);
-            m_layout->addWidget(cell, row, col);
+            m_mainLayout->addWidget(cell, row + 1, col);
             m_cells[index] = cell;
         }
 }
 
 void GameView::renderBoard(const Game &game)
 {
-    for (int row = 0; row < game.rows(); ++row)
+    for (quint32 row = 0; row < game.rows(); ++row)
     {
-        for (int col = 0; col < game.cols(); ++col)
+        for (quint32 col = 0; col < game.cols(); ++col)
         {
             QString value = game.getCell(row, col);
             updateCell(row, col, value);
         }
     }
+    updateScore(game.score());
 }
 
-void GameView::updateCell(int row, int col, const QString &value)
+void GameView::updateCell(quint32 row, quint32 col, const QString &value)
 {
-    int index = row * m_cols + col;
+    quint32 index = row * m_cols + col;
     QPushButton *cell = m_cells[index];
     cell->setText(value);
     setCellColor(cell);
@@ -41,7 +70,7 @@ void GameView::updateCell(int row, int col, const QString &value)
 
 void GameView::clearBoard()
 {
-    for (int i = 0; i < m_cells.size(); i++) {
+    for (quint32 i = 0; i < m_cells.size(); i++) {
         m_cells[i]->setText("");
         setCellColor(m_cells[i]);
     }
@@ -49,7 +78,7 @@ void GameView::clearBoard()
 
 void GameView::setCellColor(QPushButton *cell)
 {
-    const int value = cell->text().toInt();
+    const quint32 value = cell->text().toInt();
     QString color = "lightgray";
     QString textColor = "black";
 
@@ -70,4 +99,9 @@ void GameView::setCellColor(QPushButton *cell)
     cell->setStyleSheet(QString("background-color: %1; color: %2; border: 1px solid #ccc;")
                             .arg(color)
                             .arg(textColor));
+}
+
+void GameView::updateScore(quint32 score)
+{
+    m_scoreValue->setText(QString::number(score));
 }
