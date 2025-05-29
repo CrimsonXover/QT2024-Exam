@@ -41,5 +41,6 @@ private:
 
     QVector<QPushButton*> m_cells;
 
+
     void setCellColor(QPushButton *cell);
 };

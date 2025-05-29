@@ -1,10 +1,13 @@
 #pragma once
 #include<QWidget>
+#include <QTcpSocket>
+#include <QDataStream>
 
 class QVBoxLayout;
 class QLabel;
 class QPushButton;
 class QTableWidget;
+
 
 struct LeaderboardItem
 {
@@ -24,9 +27,14 @@ public:
     LeaderboardView();
     void populateLeaderboard();
     void addScore(const QString& name, quint32 score);
+    void requestLeaderboard();
 
 signals:
     void backClicked();
+    void scoreAddedSuccessfully();
+
+private slots:
+    void onReadyRead();
 
 private:
 
@@ -36,5 +44,8 @@ private:
     QTableWidget *m_leaderboardTable;
     QPushButton *m_backButton;
 
-    QList<LeaderboardItem> items;
+    QTcpSocket *m_tcpSocket;
+    quint32 m_nextBlockSize;
+
+    QList<LeaderboardItem> m_items;
 };

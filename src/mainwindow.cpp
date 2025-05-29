@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include <QKeyEvent>
 #include <QApplication>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent), m_gameRows(4), m_gameCols(4), m_game(4, 4), m_playerName("Player"), m_isGameOver(false)
@@ -78,6 +79,7 @@ void MainWindow::handleSettingsConfirmed(quint32 rows, quint32 cols, const QStri
 
 void MainWindow::handleOpenLeaderboard()
 {
+    m_leaderboardView->requestLeaderboard();
     m_stack->setCurrentWidget(m_leaderboardView);
 }
 
@@ -119,6 +121,8 @@ void MainWindow::handleGameOver()
     m_isGameOver = true;
 
     m_leaderboardView->addScore(m_playerName, m_game.score());
+
+    QMessageBox::information(this, "Game Over!", "You have run out of moves!");
 
     m_stack->setCurrentWidget(m_mainMenu);
 }
